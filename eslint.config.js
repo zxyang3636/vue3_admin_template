@@ -27,6 +27,9 @@ export default [
 
     languageOptions: {
       globals: globals.browser, // 使用浏览器全局变量
+      environment: {
+        node: true, // 👈 开启 Node.js 环境
+      },
 
       ecmaVersion: 'latest', // 使用最新的 ECMAScript 版本
 

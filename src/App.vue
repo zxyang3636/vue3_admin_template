@@ -6,8 +6,9 @@
 </template>
 
 <script setup lang="ts">
+
 const handleClick = () => {
-  console.log('aaaa')
+  console.log("aaaa")
 }
 </script>
 
