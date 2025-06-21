@@ -6,12 +6,8 @@
 </template>
 
 <script setup lang="ts">
-
-const handleClick = ()=>
-{
-
-  console.log("aaaa");
-  
+const handleClick = () => {
+  console.log('aaaa')
 }
 </script>
 
