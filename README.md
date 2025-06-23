@@ -22,17 +22,17 @@
 
 | 技术 |	版本	| 功能
 |-----|-----|-----|
-| ​​Vue 3​ |​	3.4+ |	渐进式JavaScript框架 |
+| ​​Vue 3​ |​3.4+ |	渐进式JavaScript框架 |
 | ​​TypeScript​​|	5.x	| 类型安全的JavaScript超集   |
 | ​​Vite​​ |	5.x | 	极速开发服务器与构建工具   |
 | ​​Pinia​​ |	2.x	| 现代化的Vue状态管理   |
-| ​​Vue Router |​​	4.x | 	官方路由解决方案   |
-| ​​Element Plus |​​	2.5+ | 	企业级UI组件库   |
-| ​​ESLint​ |​	9.x | 	JavaScript/TypeScript代码检查   |
-| ​​Prettier​ |​	3.x	| 代码格式化工具   |
-| ​​Stylelint​ |​	16.x | 	CSS/SCSS样式检查   |
+| ​​Vue Router |​​4.x | 	官方路由解决方案   |
+| ​​Element Plus |​​2.5+ | 	企业级UI组件库   |
+| ​​ESLint​ |​9.x | 	JavaScript/TypeScript代码检查   |
+| ​​Prettier​ |​3.x	| 代码格式化工具   |
+| ​​Stylelint​ |​16.x| 	CSS/SCSS样式检查   |
 | ​​Husky​​ |	9.x	| Git钩子管理   |
-| ​​Commitlint |​​	19.x	| Git提交信息规范   |
+| ​​Commitlint |	19.x	| Git提交信息规范   |
 
 
 ## ✨ 核心特性
@@ -50,11 +50,12 @@
 ​​3. 📦 高效依赖管理​​
 - PNPM作为核心包管理器
 
-4. 🎨主题定制 
+​​4. 🎨主题定制 
 - 亮色/暗色模式一键切换
 - 自定义主题色：支持十六进制颜色码输入
 - 实时预览：配置即时生效，所见即所得
 - CSS变量：统一管理设计系统变量
+
 
 ## ​​📂 模块化架构
 ```
