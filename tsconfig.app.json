@@ -9,9 +9,9 @@
     },
     /* Linting */
     "strict": true,
-    "noUnusedLocals": false,
+    "noUnusedLocals": false, // 忽略未使用变量
     "noUnusedParameters": true,
-    "erasableSyntaxOnly": true,
+    "erasableSyntaxOnly": false,
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true
   },

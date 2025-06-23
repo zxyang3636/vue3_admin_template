@@ -1,12 +1,15 @@
 <template>
-  <div>
-    <h2>SVG的使用</h2>
-    <SvgIcon name="home" color="red" width="100px" height="100px"></SvgIcon>
-  </div>
+  <div></div>
 </template>
 
 <script setup lang="ts">
-import SvgIcon from '@/components/SvgIcon/index.vue'
+  import { ref, reactive, toRefs, onMounted } from 'vue'
+  import { reqLogin } from './api/user'
+  onMounted(() => {
+    reqLogin({ username: 'admin', password: '111111' }).then((res) => {
+      console.log(res)
+    })
+  })
 </script>
 
-<style scoped></style>
+<style scoped lang="scss"></style>
