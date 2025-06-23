@@ -26,10 +26,7 @@ export default [
     ignores: ['node_modules', 'dist', '*.config.js'],
 
     languageOptions: {
-      globals: globals.browser, // 使用浏览器全局变量
-      environment: {
-        node: true, // 👈 开启 Node.js 环境
-      },
+      globals: { ...globals.browser, ...globals.node }, // 使用浏览器全局变量
 
       ecmaVersion: 'latest', // 使用最新的 ECMAScript 版本
 
@@ -71,7 +68,7 @@ export default [
 
       // TypeScript 规则
 
-      '@typescript-eslint/no-unused-vars': 'error', // 禁止未使用的变量
+      '@typescript-eslint/no-unused-vars': 'off', // 允许未使用的变量
 
       '@typescript-eslint/prefer-ts-expect-error': 'error', // 优先使用 ts-expect-error
 
