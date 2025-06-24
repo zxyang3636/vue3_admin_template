@@ -6,12 +6,17 @@ import 'element-plus/dist/index.css'
 import zhCn from 'element-plus/dist/locale/zh-cn.mjs'
 // 注册整个项目全局组件
 import globalComponent from '@/components'
+// svg插件
+import 'virtual:svg-icons-register'
+import router from '@/router'
+import '@/styles/index.scss'
+import pinia from './store'
 
 const app = createApp(App)
 app.use(ElementPlus, {
   locale: zhCn,
 })
 app.use(globalComponent)
-// svg插件
-import 'virtual:svg-icons-register'
+app.use(router)
+app.use(pinia)
 app.mount('#app')

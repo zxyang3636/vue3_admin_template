@@ -10,7 +10,8 @@ export interface loginResponse {
 }
 
 interface dataType {
-  token: string
+  token?: string
+  message?: string
 }
 
 interface userInfo {
