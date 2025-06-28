@@ -2,7 +2,7 @@
   <div class="layout_container">
     <!-- 左侧菜单 -->
     <div class="layout_slide" :class="{ fold: layoutSettingStore.fold }">
-      <Logo style="margin-bottom: 10px;"></Logo>
+      <Logo></Logo>
       <!-- 左侧菜单滚动条 -->
       <el-scrollbar class="scrollbar">
         <!-- 菜单组件 -->
@@ -63,6 +63,7 @@
       transition: all 0.4s;
 
       .scrollbar {
+        padding-top: 10px;
         height: calc(100vh - $base-logo-height);
         width: $base-menu-width;
         .el-menu {
