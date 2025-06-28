@@ -1,10 +1,11 @@
 @use './reset.scss' as *;
+@use './element-plus.scss' as *;
 
 
 // 滚动条外观设计
 ::-webkit-scrollbar {
-  width: 10px;
-  height: 10px;
+  width: 6px;
+  height: 6px;
 }
 
 ::-webkit-scrollbar-thumb {

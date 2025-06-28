@@ -4,7 +4,7 @@
   <el-button icon="Setting" size="default" circle></el-button>
   <img src="../../../../public/logo.png" style="width: 32px; height: 32px; margin: 0px 10px" alt="logo" />
   <!-- 右侧下拉 -->
-  <el-dropdown>
+  <el-dropdown style="cursor: pointer;">
     <span class="el-dropdown-link">
       admin
       <el-icon class="el-icon--right">

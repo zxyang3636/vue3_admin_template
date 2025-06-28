@@ -2,13 +2,13 @@
   <div class="layout_container">
     <!-- 左侧菜单 -->
     <div class="layout_slide" :class="{ fold: layoutSettingStore.fold }">
-      <Logo></Logo>
+      <Logo style="margin-bottom: 10px;"></Logo>
       <!-- 左侧菜单滚动条 -->
       <el-scrollbar class="scrollbar">
         <!-- 菜单组件 -->
         <el-menu
           mode="vertical"
-          background-color="#f3f4f6"
+          background-color="#fff"
           text-color="#000000d9"
           active-text-color="#3370FF"
           :default-active="$route.path"
@@ -60,7 +60,7 @@
       width: $base-menu-width;
       height: 100vh;
       background-color: $base-menu-background-color;
-      transition: all 0.3s;
+      transition: all 0.4s;
 
       .scrollbar {
         height: calc(100vh - $base-logo-height);
@@ -83,7 +83,7 @@
       position: fixed;
       top: 0%;
       left: $base-menu-width;
-      transition: all 0.3s;
+      transition: all 0.4s;
       &.fold {
         width: calc(100vw - $base-menu-min-width);
         left: $base-menu-min-width;
@@ -96,10 +96,10 @@
       left: $base-menu-width;
       width: calc(100% - $base-menu-width);
       height: calc(100vh - $base-tabbar-height);
-      // background-color: green;
+      background-color: #f8f9fa;
       padding: 20px;
       overflow: auto; //内容区域加个滚动条，否则内容会超出整个区域滚动
-      transition: all 0.3s;
+      transition: all 0.4s;
       &.fold {
         width: calc(100vw - $base-menu-min-width);
         left: $base-menu-min-width;

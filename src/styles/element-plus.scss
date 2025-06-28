@@ -1,0 +1,86 @@
+
+// 覆盖 Element Plus 菜单项高度
+.el-menu-item {
+    height: 40px !important;
+    line-height: 40px !important;
+  }
+  
+  .el-sub-menu__title {
+    height: 40px !important;  
+    line-height: 40px !important;
+  }
+  
+  // 左侧菜单 菜单项默认状态 - 添加过渡效果
+  .el-menu-item {
+    height: 40px !important;
+    line-height: 40px !important;
+    border-radius: 8px !important;  // 默认状态也要有圆角
+    transition: all 0.3s ease !important;  // 添加过渡动画
+    margin: 0 10px !important;  // 默认状态也要有margin
+  }
+  
+  // 菜单项hover样式
+  .el-menu-item:hover {
+    background-color: #f0f0f0 !important;
+    border-radius: 8px !important;
+    margin: 0 10px !important;
+  }
+  
+  // 子菜单标题默认状态 - 添加过渡效果
+  .el-sub-menu__title {
+    height: 40px !important;  
+    line-height: 40px !important;
+    border-radius: 8px !important;  // 默认状态也要有圆角
+    transition: all 0.3s ease !important;  // 添加过渡动画
+    margin: 0 8px !important;  // 默认状态也要有margin
+  }
+  
+  // 子菜单标题hover样式
+  .el-sub-menu__title:hover {
+    background-color: #f0f0f0 !important;
+    border-radius: 8px !important;
+    margin: 0 8px !important;
+  }
+  
+  // 子菜单激活状态样式 - 新添加
+  .el-sub-menu.is-active > .el-sub-menu__title {
+    border-radius: 8px !important;
+    margin: 0 8px !important;
+    color: #3370FF !important;
+  }
+  
+  // 菜单项激活状态样式 - 新添加
+  .el-menu-item.is-active {
+    background-color: #e6f4ff !important;
+    border-radius: 8px !important;
+    margin: 0 10px !important;
+  }
+  
+  
+  // 折叠状态下的样式修复 - 更精确的选择器
+  .el-menu--collapse {
+    .el-menu-item,
+    .el-sub-menu > .el-sub-menu__title {
+      margin: 0 0px !important;  // 保留一点边距但不要太多
+      padding-left: 0 !important;
+      padding-right: 0 !important;
+      display: flex !important;
+      justify-content: center !important;  // 使用flex居中
+      align-items: center !important;
+    }
+    
+    .el-menu-item:hover,
+    .el-sub-menu > .el-sub-menu__title:hover {
+      margin: 0 0px !important;
+      border-radius: 6px !important;  // 保持圆角但稍小一点
+      background-color: #f0f0f0 !important;
+    }
+    
+    .el-menu-item.is-active,
+    .el-sub-menu.is-active > .el-sub-menu__title {
+      margin: 0 0px !important;
+      border-radius: 6px !important;
+      background-color: #e6f4ff !important;
+    }
+  }
+  

@@ -3,5 +3,5 @@
 export default {
   title: 'ZZY管理系统',
   logo: '/public/logo.png',
-  logoHidden: true, // logo组件是否显示
+  logoHidden: true, // logo组件是否显示 true 显示 false 隐藏
 }
