@@ -34,11 +34,15 @@
   import useUserStore from '@/store/modules/user' // 导入useUserStore函数
   import { User, Lock } from '@element-plus/icons-vue'
   import { ElMessage, ElNotification } from 'element-plus'
-  import { useRouter } from 'vue-router'
+  import { useRouter, useRoute } from 'vue-router'
   import { getTime } from '@/utils/times'
+  defineOptions({
+    name: 'Login',
+  })
 
   let userStore = useUserStore()
   let $router = useRouter()
+  let $route = useRoute()
 
   let isLoding = ref(false)
   let loginForms = ref()
@@ -51,7 +55,7 @@
     isLoding.value = true
     try {
       await userStore.userLogin(loginForm)
-      $router.push('/')
+      $router.push(($route.query.redirect as string) || '/')
       ElNotification({
         title: `Hi ${getTime()}`,
         message: '欢迎回来',

@@ -51,9 +51,20 @@ export default [
     method: 'get',
     response: (request) => {
       //获取请求头携带token
-      const token = request.headers.token
+      const token = request.headers.Authorization || request.headers.authorization
+      // console.log('接收到的token:', token)
+      // console.log('请求头:', request.headers)
+
+      const userList = createUserList()
+      // console.log(
+      //   '用户列表中的tokens:',
+      //   userList.map((user) => user.token),
+      // )
+
       //查看用户信息是否包含有次token用户
-      const checkUser = createUserList().find((item) => item.token === token)
+      const checkUser = userList.find((item) => item.token === token)
+      // console.log('找到的用户:', checkUser)
+
       //没有返回失败的信息
       if (!checkUser) {
         return { code: 201, data: { message: '获取用户信息失败' } }

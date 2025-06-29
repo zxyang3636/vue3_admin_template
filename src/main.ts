@@ -11,6 +11,7 @@ import 'virtual:svg-icons-register'
 import router from '@/router'
 import '@/styles/index.scss'
 import pinia from './store'
+import './permission'
 
 const app = createApp(App)
 app.use(ElementPlus, {

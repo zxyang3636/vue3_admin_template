@@ -1,8 +1,8 @@
 import { defineStore } from 'pinia'
-import { reqLogin } from '@/api/user'
+import { reqLogin, reqUserInfo } from '@/api/user'
 import type { loginForm, loginResponse } from '@/api/user/type'
 import type { UserState } from './types/types'
-import { SET_TOKEN, GET_TOKEN } from '@/utils/token'
+import { SET_TOKEN, GET_TOKEN, REMOVE_TOKEN } from '@/utils/token'
 import { constantRoute } from '@/router/routes'
 
 let useUserStore = defineStore('User', {
@@ -10,6 +10,8 @@ let useUserStore = defineStore('User', {
     return {
       token: GET_TOKEN(),
       menuRoutes: constantRoute,
+      username: '',
+      avatar: '',
     }
   },
   actions: {
@@ -22,6 +24,22 @@ let useUserStore = defineStore('User', {
       } else {
         return Promise.reject(new Error(response.data.message))
       }
+    },
+    async userInfo() {
+      let result = await reqUserInfo()
+      if (result.code === 200) {
+        this.username = result.data.checkUser.username
+        this.avatar = result.data.checkUser.avatar
+        return 'ok'
+      } else {
+        return Promise.reject(new Error('获取用户信息失败'))
+      }
+    },
+    userLogout() {
+      this.token = ''
+      this.username = ''
+      this.avatar = ''
+      REMOVE_TOKEN()
     },
   },
   getters: {},

@@ -1,6 +1,7 @@
 // axios二次封装
 import axios from 'axios'
 import { ElMessage } from 'element-plus'
+import useUserStore from '@/store/modules/user'
 
 let request = axios.create({
   baseURL: import.meta.env.VITE_APP_BASE_API, // 基础路径带上/api
@@ -9,8 +10,9 @@ let request = axios.create({
 
 //请求拦截器
 request.interceptors.request.use((config) => {
+  let useUser = useUserStore()
   //获取token,在请求头携带
-  const token = localStorage.getItem('Authorization')
+  const token = useUser.token
   if (token) {
     config.headers.Authorization = token
   }
