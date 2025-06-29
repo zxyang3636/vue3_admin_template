@@ -1,9 +1,9 @@
 // 通过vue-router实现模版路由配置
-import { createRouter, createWebHistory } from 'vue-router'
+import { createRouter, createWebHashHistory } from 'vue-router'
 import { constantRoute } from './routes'
 
 const router = createRouter({
-  history: createWebHistory(),
+  history: createWebHashHistory(),
   routes: constantRoute,
   // 滚动行为
   scrollBehavior() {
