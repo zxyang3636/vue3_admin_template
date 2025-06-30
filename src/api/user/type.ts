@@ -5,13 +5,17 @@ export interface loginForm {
 }
 
 export interface loginResponse {
-  code: number
-  data: dataType
+  token: string
+  // code: number
+  // data: dataType
+  // timestamp: number
+  // success: boolean
+  // fail: boolean
+  // message: string
 }
 
 interface dataType {
   token?: string
-  message?: string
 }
 
 interface userInfo {
@@ -31,6 +35,8 @@ interface user {
 }
 
 export interface userResponseData {
-  code: number
-  data: user
+  avatar: string
+  username: string
+  // code: number
+  // data: user
 }

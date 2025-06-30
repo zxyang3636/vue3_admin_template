@@ -19,9 +19,9 @@ interface Result<T = any> {
 
 // 扩展请求配置（就是在原有axios配置基础上增加自定义选项）
 interface RequestConfig extends AxiosRequestConfig {
-  showError?: boolean      // 是否显示错误提示，默认true
-  showSuccess?: boolean    // 是否显示成功提示，默认false
-  successMessage?: string  // 自定义成功提示信息
+  showError?: boolean // 是否显示错误提示，默认true
+  showSuccess?: boolean // 是否显示成功提示，默认false
+  successMessage?: string // 自定义成功提示信息
 }
 
 //请求拦截器
@@ -40,26 +40,26 @@ request.interceptors.response.use(
   (response: AxiosResponse<Result>) => {
     const { data } = response
     const config = response.config as RequestConfig
-    
     // 处理后端返回的Result结构
     if (data.code === 200) {
       // 成功情况 - 显示成功提示
       if (config.showSuccess || config.successMessage) {
         ElMessage.success(config.successMessage || data.message || '操作成功')
       }
-      return data.data // 只返回data部分给前端使用
+      // console.log('请求成功', data.data)
+      return data.data
     } else {
       // 业务错误处理
       handleBusinessError(data, config)
       return Promise.reject({
         code: data.code,
-        message: data.message
+        message: data.message,
       })
     }
   },
   (error) => {
     const { response, config } = error
-    
+
     // 处理HTTP状态码错误
     if (response) {
       handleHttpError(response, config)
@@ -69,9 +69,9 @@ request.interceptors.response.use(
         ElMessage.error('网络连接异常，请检查网络')
       }
     }
-    
+
     return Promise.reject(error)
-  }
+  },
 )
 
 // 处理业务错误（后端返回的错误码）
@@ -82,14 +82,14 @@ const handleBusinessError = (data: Result, config: RequestConfig) => {
     case 4002: // Token无效
       handleTokenError(data.message)
       break
-      
+
     case 403:
     case 3001: // 权限不足
       if (config.showError !== false) {
         ElMessage.error(data.message || '无权限访问')
       }
       break
-      
+
     default:
       if (config.showError !== false) {
         ElMessage.error(data.message || '操作失败')
@@ -101,7 +101,7 @@ const handleBusinessError = (data: Result, config: RequestConfig) => {
 const handleHttpError = (response: any, config: RequestConfig) => {
   const status = response.status
   let message = ''
-  
+
   switch (status) {
     case 400:
       message = '请求参数错误'
@@ -128,7 +128,7 @@ const handleHttpError = (response: any, config: RequestConfig) => {
     default:
       message = `连接错误${status}`
   }
-  
+
   if (config.showError !== false) {
     ElMessage.error(message)
   }
@@ -137,16 +137,12 @@ const handleHttpError = (response: any, config: RequestConfig) => {
 // 处理Token错误
 const handleTokenError = (_message: string) => {
   const userStore = useUserStore()
-  
-  ElMessageBox.confirm(
-    '登录状态已过期，请重新登录',
-    '系统提示',
-    {
-      confirmButtonText: '重新登录',
-      cancelButtonText: '取消',
-      type: 'warning'
-    }
-  ).then(() => {
+
+  ElMessageBox.confirm('登录状态已过期，请重新登录', '系统提示', {
+    confirmButtonText: '重新登录',
+    cancelButtonText: '取消',
+    type: 'warning',
+  }).then(() => {
     userStore.userLogout()
     router.push('/login')
   })
