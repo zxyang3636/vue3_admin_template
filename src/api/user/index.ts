@@ -11,6 +11,6 @@ enum API {
 
 // 暴露请求函数
 
-export const reqLogin = (data: loginForm) => request.post<any, loginResponse>(API.LOGIN_URL, data)
+export const reqLogin = (data: loginForm) => request.post<loginResponse>(API.LOGIN_URL, data)
 
-export const reqUserInfo = () => request.get<any, userResponseData>(API.USER_INFO_URL)
+export const reqUserInfo = () => request.get<userResponseData>(API.USER_INFO_URL)
