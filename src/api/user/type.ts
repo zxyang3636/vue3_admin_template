@@ -5,7 +5,8 @@ export interface loginForm {
 }
 
 export interface loginResponse {
-  token: string
+  accessToken: string
+  refreshToken: string
   // code: number
   // data: dataType
   // timestamp: number
@@ -37,6 +38,7 @@ interface user {
 export interface userResponseData {
   avatar: string
   username: string
+  nickname: string
   // code: number
   // data: user
 }

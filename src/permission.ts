@@ -17,8 +17,8 @@ router.beforeEach(async (to, _from, next) => {
   // from: 当前导航正要离开的路由
   // next: 调用该方法后，才能进入下一个钩子
   Nprogress.start()
-  let username = userStore.username
-  let token = userStore.token
+  let username = userStore.nickname
+  let token = userStore.accessToken
   if (token) {
     if (to.path === '/login') {
       next({ path: '/' })

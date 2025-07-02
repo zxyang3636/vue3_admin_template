@@ -24,9 +24,9 @@ interface Result<T = any> {
 request.interceptors.request.use((config) => {
   let useUser = useUserStore()
   //获取token,在请求头携带
-  const token = useUser.token
+  const token = useUser.accessToken
   if (token) {
-    config.headers.Authorization = token
+    config.headers.Authorization = `Bearer ${token}`
   }
   return config
 })
