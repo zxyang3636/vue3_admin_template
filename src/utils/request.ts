@@ -26,7 +26,7 @@ export interface BaseResult {
 
 // 带数据的响应类型
 export interface Result<T = any> extends BaseResult {
-  data?: T  // 使用可选属性，因为有些接口可能没有数据返回
+  data?: T // 使用可选属性，因为有些接口可能没有数据返回
 }
 
 //请求拦截器
