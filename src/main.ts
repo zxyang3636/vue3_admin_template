@@ -7,6 +7,7 @@ import zhCn from 'element-plus/dist/locale/zh-cn.mjs'
 // 注册整个项目全局组件
 import globalComponent from '@/components'
 // svg插件
+//@ts-expect-error 忽略svg图标注册模块的类型检查
 import 'virtual:svg-icons-register'
 import router from '@/router'
 import '@/styles/index.scss'
