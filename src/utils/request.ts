@@ -1,10 +1,10 @@
 // axios二次封装
 import axios, { type AxiosRequestConfig, type AxiosResponse } from 'axios'
-import { ElMessage, ElMessageBox } from 'element-plus'
+import { ElMessage } from 'element-plus'
 import useUserStore from '@/store/modules/user'
 import router from '@/router'
 import { reqRefreshToken } from '@/api/user'
-import type { loginResponse } from '@/api/user/type'
+import type { LoginResponse } from '@/api/user/type'
 import { SET_ACCESS_TOKEN, SET_REFRESH_TOKEN, REMOVE_TOKEN } from './token'
 
 let request = axios.create({
@@ -15,12 +15,18 @@ let request = axios.create({
   },
 })
 
-// 定义后端返回的数据结构
-interface Result<T = any> {
+// 基础响应类型
+export interface BaseResult {
   code: number
   message: string
-  data: T
   timestamp: number
+  success: boolean
+  fail: boolean
+}
+
+// 带数据的响应类型
+export interface Result<T = any> extends BaseResult {
+  data?: T  // 使用可选属性，因为有些接口可能没有数据返回
 }
 
 //请求拦截器
@@ -36,17 +42,20 @@ request.interceptors.request.use((config) => {
 
 //响应拦截器
 request.interceptors.response.use(
-  (response: AxiosResponse<Result>) => {
+  (response: AxiosResponse<Result>): any => {
     const { data } = response
     // 处理后端返回的Result结构
     if (data.code === 200) {
       // 成功情况 - 显示成功提示
-      // ElMessage.success(data.message || '操作成功')
-      // console.log('请求成功', data.data)
-      return data.data
+      const customConfig = response.config as AxiosRequestConfig
+      if (customConfig.showSuccessMessage) {
+        const message = customConfig.successMessage || data.message || '操作成功'
+        ElMessage.success(message)
+      }
+      return data
     } else {
       // 业务错误处理
-      const result = handleBusinessError(data, response.config)
+      const result = handleBusinessError(data, response.config as AxiosRequestConfig)
       if (result !== undefined && result !== null) {
         return result // 如果是token刷新成功后的重试请求，直接返回结果
       }
@@ -74,6 +83,9 @@ request.interceptors.response.use(
 
 // 处理业务错误（后端返回的错误码）
 const handleBusinessError = (data: Result, config: AxiosRequestConfig) => {
+  // 检查是否需要显示错误提示（默认显示）
+  const shouldShowError = config?.showErrorMessage !== false
+
   switch (data.code) {
     case 401:
     case 4001: // Token过期
@@ -83,11 +95,17 @@ const handleBusinessError = (data: Result, config: AxiosRequestConfig) => {
 
     case 403:
     case 3001: // 权限不足
-      ElMessage.error(data.message || '无权限访问')
+      if (shouldShowError) {
+        const message = config?.errorMessage || data.message || '无权限访问'
+        ElMessage.error(message)
+      }
       break
 
     default:
-      ElMessage.error(data.message || '操作失败')
+      if (shouldShowError) {
+        const message = config?.errorMessage || data.message || '操作失败'
+        ElMessage.error(message)
+      }
   }
 }
 
@@ -159,22 +177,22 @@ const handleTokenError = async (_message: string, originalConfig: AxiosRequestCo
   isRefreshing = true
 
   try {
-    const userVO: loginResponse = await reqRefreshToken({
+    const userVO: LoginResponse = await reqRefreshToken({
       refreshToken: userStore.refreshToken as string,
     })
 
     // 更新token
-    userStore.accessToken = userVO.accessToken as string
-    userStore.refreshToken = userVO.refreshToken as string
-    SET_ACCESS_TOKEN(userVO.accessToken as string)
-    SET_REFRESH_TOKEN(userVO.refreshToken as string)
+    userStore.accessToken = userVO.data.accessToken as string
+    userStore.refreshToken = userVO.data.refreshToken as string
+    SET_ACCESS_TOKEN(userVO.data.accessToken as string)
+    SET_REFRESH_TOKEN(userVO.data.refreshToken as string)
 
     // 处理队列中的请求（传入新token）
-    processQueue(null, userVO.accessToken as string)
+    processQueue(null, userVO.data.accessToken as string)
 
     // 重试原始请求
     if (originalConfig.headers) {
-      originalConfig.headers.Authorization = `Bearer ${userVO.accessToken}`
+      originalConfig.headers.Authorization = `Bearer ${userVO.data.accessToken}`
     }
 
     return request(originalConfig)

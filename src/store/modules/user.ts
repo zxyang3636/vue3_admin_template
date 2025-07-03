@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { reqLogin, reqUserInfo, reqUserLogout } from '@/api/user'
-import type { loginForm, loginResponse } from '@/api/user/type'
+import type { loginForm, LoginResponse } from '@/api/user/type'
 import type { UserState } from './types/types'
 import { REMOVE_TOKEN, GET_ACCESS_TOKEN, GET_REFRESH_TOKEN, SET_ACCESS_TOKEN, SET_REFRESH_TOKEN } from '@/utils/token'
 import { constantRoute } from '@/router/routes'
@@ -19,11 +19,11 @@ let useUserStore = defineStore('User', {
   actions: {
     async userLogin(val: loginForm) {
       try {
-        let response: loginResponse = await reqLogin(val)
-        this.accessToken = response.accessToken as string
-        this.refreshToken = response.refreshToken as string
-        SET_ACCESS_TOKEN(response.accessToken as string)
-        SET_REFRESH_TOKEN(response.refreshToken as string)
+        let response: LoginResponse = await reqLogin(val)
+        this.accessToken = response.data.accessToken as string
+        this.refreshToken = response.data.refreshToken as string
+        SET_ACCESS_TOKEN(response.data.accessToken as string)
+        SET_REFRESH_TOKEN(response.data.refreshToken as string)
         return 'ok'
       } catch (err: any) {
         return Promise.reject(new Error(err.message))
@@ -32,9 +32,9 @@ let useUserStore = defineStore('User', {
     async userInfo() {
       try {
         let result = await reqUserInfo()
-        this.username = result.username
-        this.avatar = result.avatar
-        this.nickname = result.nickname || `用户${Math.random().toString(36).substr(2, 6)}`
+        this.username = result.data.username
+        this.avatar = result.data.avatar
+        this.nickname = result.data.nickname || `用户${Math.random().toString(36).substr(2, 6)}`
         return 'ok'
       } catch (err: any) {
         return Promise.reject(new Error(err.message))
