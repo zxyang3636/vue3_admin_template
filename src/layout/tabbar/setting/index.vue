@@ -6,7 +6,7 @@
   <!-- 右侧下拉 -->
   <el-dropdown style="cursor: pointer">
     <span class="el-dropdown-link">
-      {{ userStore.username }}
+      {{ userStore.nickname }}
       <el-icon class="el-icon--right">
         <arrow-down />
       </el-icon>
@@ -49,8 +49,8 @@
     }
   }
 
-  const logout = () => {
-    userStore.userLogout()
+  const logout = async () => {
+    await userStore.userLogout()
     $router.push({ path: '/login', query: { redirect: $route.path } })
   }
 </script>

@@ -5,6 +5,7 @@ import 'nprogress/nprogress.css'
 import useUserStore from '@/store/modules/user'
 import pinia from './store'
 import setting from './setting'
+import { REMOVE_TOKEN } from './utils/token'
 
 Nprogress.configure({ showSpinner: false }) // 进度环关闭
 
@@ -30,7 +31,9 @@ router.beforeEach(async (to, _from, next) => {
           await userStore.userInfo()
           next()
         } catch (error) {
-          userStore.userLogout()
+          // 清除本地token，避免死循环
+          REMOVE_TOKEN()
+          // 不调用logout接口，直接跳转到登录页
           next({ path: '/login', query: { redirect: to.path } })
         }
       }

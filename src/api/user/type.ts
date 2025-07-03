@@ -42,3 +42,7 @@ export interface userResponseData {
   // code: number
   // data: user
 }
+
+export interface RefreshRequest {
+  refreshToken: string
+}

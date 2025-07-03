@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { reqLogin, reqUserInfo } from '@/api/user'
+import { reqLogin, reqUserInfo, reqUserLogout } from '@/api/user'
 import type { loginForm, loginResponse } from '@/api/user/type'
 import type { UserState } from './types/types'
 import { REMOVE_TOKEN, GET_ACCESS_TOKEN, GET_REFRESH_TOKEN, SET_ACCESS_TOKEN, SET_REFRESH_TOKEN } from '@/utils/token'
@@ -34,24 +34,25 @@ let useUserStore = defineStore('User', {
         let result = await reqUserInfo()
         this.username = result.username
         this.avatar = result.avatar
+        this.nickname = result.nickname || `用户${Math.random().toString(36).substr(2, 6)}`
+        return 'ok'
       } catch (err: any) {
         return Promise.reject(new Error(err.message))
       }
-      // console.log(result)
-      // if (result.code === 200) {
-      //   this.username = result.data.checkUser.username
-      //   this.avatar = result.data.checkUser.avatar
-      //   return 'ok'
-      // } else {
-      //   return Promise.reject(new Error('获取用户信息失败'))
-      // }
     },
-    userLogout() {
-      this.accessToken = ''
-      this.username = ''
-      this.avatar = ''
-      this.nickname = ''
-      REMOVE_TOKEN()
+    async userLogout() {
+      try {
+        await reqUserLogout()
+        this.accessToken = ''
+        this.refreshToken = ''
+        this.username = ''
+        this.avatar = ''
+        this.nickname = ''
+        REMOVE_TOKEN()
+        return 'ok'
+      } catch (error: any) {
+        return Promise.reject(new Error(error.message))
+      }
     },
   },
   getters: {},
