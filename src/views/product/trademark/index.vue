@@ -1,7 +1,7 @@
 <template>
   <el-card shadow="hover">
     <!-- 顶部添加 -->
-     <el-button icon="Plus" type="primary">添加</el-button>
+    <el-button icon="Plus" type="primary">添加</el-button>
   </el-card>
 </template>
 

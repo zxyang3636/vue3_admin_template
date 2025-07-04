@@ -35,7 +35,7 @@ request.interceptors.request.use((config) => {
   //获取token,在请求头携带
   const token = useUser.accessToken
   // const token = localStorage.getItem('ACCESS_TOKEN')
-  
+
   if (token) {
     config.headers.Authorization = `Bearer ${token}`
   }
