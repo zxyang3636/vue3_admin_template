@@ -1,7 +1,8 @@
 <template>
-  <div>
-    <h1>品牌管理</h1>
-  </div>
+  <el-card shadow="hover">
+    <!-- 顶部添加 -->
+     <el-button icon="Plus" type="primary">添加</el-button>
+  </el-card>
 </template>
 
 <script setup lang="ts">

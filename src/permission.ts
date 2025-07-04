@@ -6,6 +6,7 @@ import useUserStore from '@/store/modules/user'
 import pinia from './store'
 import setting from './setting'
 import { REMOVE_TOKEN } from './utils/token'
+import { reqUserLogout } from './api/user'
 
 Nprogress.configure({ showSpinner: false }) // 进度环关闭
 
@@ -42,6 +43,7 @@ router.beforeEach(async (to, _from, next) => {
     if (to.path === '/login') {
       next()
     } else {
+      await reqUserLogout()
       next({ path: '/login', query: { redirect: to.path } })
     }
   }

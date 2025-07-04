@@ -17,20 +17,15 @@ export type LoginResponse = ApiResponse<LoginResponseData>
 export interface LoginResponseData {
   accessToken: string
   refreshToken: string
-  // code: number
-  // data: dataType
-  // timestamp: number
-  // success: boolean
-  // fail: boolean
-  // message: string
 }
 
 export interface UserResponseData {
   avatar: string
   username: string
   nickname: string
-  // code: number
-  // data: user
+  routes: string[]
+  buttons: string
+  roles: string[]
 }
 
 export type UserInfoResponse = ApiResponse<UserResponseData>
