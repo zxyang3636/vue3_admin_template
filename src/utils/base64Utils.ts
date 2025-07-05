@@ -33,19 +33,19 @@ export class Base64Utils {
    */
   public static decode(base64Str: string): string | null {
     if (!base64Str) {
-      return null;
+      return null
     }
     try {
       // 1. 使用 atob 进行Base64解码
-      const binaryStr = atob(base64Str);
+      const binaryStr = atob(base64Str)
       // 2. 将解码后的二进制字符串重新编码为UTF-8，以还原原始字符
-      return decodeURIComponent(escape(binaryStr));
+      return decodeURIComponent(escape(binaryStr))
     } catch (e) {
       console.error('Base64Utils.decode: 解码失败，输入字符串可能格式不正确。', {
         input: base64Str,
         error: e,
-      });
-      return null; // 解码失败时返回 null，防止程序崩溃
+      })
+      return null // 解码失败时返回 null，防止程序崩溃
     }
   }
 }
