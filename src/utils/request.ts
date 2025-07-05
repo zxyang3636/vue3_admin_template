@@ -93,6 +93,10 @@ const handleBusinessError = (data: Result, config: AxiosRequestConfig) => {
     case 4001: // Token过期
     case 4002: // Token无效
       handleTokenError(data.message, config)
+      if (shouldShowError) {
+        const message = config?.errorMessage || data.message || '认证过期，请重新登录'
+        ElMessage.error(message)
+      }
       break
 
     case 403:

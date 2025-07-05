@@ -36,8 +36,18 @@
   import { ElMessage, ElNotification } from 'element-plus'
   import { useRouter, useRoute } from 'vue-router'
   import { getTime } from '@/utils/times'
+  import { getPublicKey } from '@/api/auth/index.ts'
+  import type { ApiResponse } from '@/api/type'
+  import { CryptoUtils } from '@/utils/cryptoUtils'
+  import { Base64Utils } from '@/utils/base64Utils'
   defineOptions({
     name: 'Login',
+  })
+
+  const publicKey = ref('')
+  onMounted(async () => {
+    const res: ApiResponse = await getPublicKey()
+    publicKey.value = res.data
   })
 
   let userStore = useUserStore()
@@ -47,12 +57,21 @@
   let isLoding = ref(false)
   let loginForms = ref()
 
-  const loginForm = reactive({ username: 'admin', password: '111111' })
+  const loginForm = reactive({ username: 'admin', password: '111111', decodeIv: '', aesKey: '', encryptedPassword: '' })
 
   const login = async () => {
     await loginForms.value.validate()
-
     isLoding.value = true
+    const aesKey = CryptoUtils.generateAesKey(256)
+    // iv
+    const decodeIv = CryptoUtils.generateIv()
+    // aes加密密码
+    const encryptedPassword = CryptoUtils.aesEncrypt(loginForm.password, aesKey, decodeIv)
+    // 公钥加密aesKey
+    const encryptedAesKey = CryptoUtils.rsaEncrypt(aesKey, publicKey.value)
+    loginForm.decodeIv = decodeIv
+    loginForm.aesKey = encryptedAesKey as string
+    loginForm.encryptedPassword = encryptedPassword as string
     try {
       await userStore.userLogin(loginForm)
       $router.push(($route.query.redirect as string) || '/')

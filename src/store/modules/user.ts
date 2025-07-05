@@ -19,7 +19,13 @@ let useUserStore = defineStore('User', {
   actions: {
     async userLogin(val: loginForm) {
       try {
-        let response: LoginResponse = await reqLogin(val)
+        let reqParams: loginForm = {
+          username: val.username,
+          password: val.encryptedPassword as string,
+          decodeIv: val.decodeIv,
+          aesKey: val.aesKey,
+        }
+        let response: LoginResponse = await reqLogin(reqParams)
         this.accessToken = response.data.accessToken as string
         this.refreshToken = response.data.refreshToken as string
         SET_ACCESS_TOKEN(response.data.accessToken as string)
