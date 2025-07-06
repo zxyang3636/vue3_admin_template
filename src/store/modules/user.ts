@@ -2,7 +2,13 @@ import { defineStore } from 'pinia'
 import { reqLogin, reqUserInfo, reqUserLogout } from '@/api/user'
 import type { loginForm, LoginResponse } from '@/api/user/type'
 import type { UserState } from './types/types'
-import { REMOVE_TOKEN, GET_ACCESS_TOKEN, GET_REFRESH_TOKEN, SET_ACCESS_TOKEN, SET_REFRESH_TOKEN } from '@/utils/token'
+import {
+  REMOVE_TOKEN,
+  GET_ACCESS_TOKEN,
+  GET_REFRESH_TOKEN,
+  SET_ACCESS_TOKEN,
+  SET_REFRESH_TOKEN,
+} from '@/utils/token'
 import { constantRoute } from '@/router/routes'
 
 let useUserStore = defineStore('User', {

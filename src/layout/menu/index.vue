@@ -14,7 +14,11 @@
 
     <!-- 有子路由且个数等于一个 -->
     <template v-if="item.children && item.children.length === 1">
-      <el-menu-item v-if="!item.children[0].meta?.hidden" :index="item.children[0].path" @click="goRoute">
+      <el-menu-item
+        v-if="!item.children[0].meta?.hidden"
+        :index="item.children[0].path"
+        @click="goRoute"
+      >
         <el-icon>
           <component :is="item.children[0].meta?.icon"></component>
         </el-icon>

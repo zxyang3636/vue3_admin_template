@@ -28,7 +28,8 @@ export const reqUserLogout = () =>
     successMessage: '退出成功',
   })
 
-export const reqRefreshToken = (data: RefreshRequest) => request.post<any, LoginResponse>(API.REFRESH_TOKEN_URL, data)
+export const reqRefreshToken = (data: RefreshRequest) =>
+  request.post<any, LoginResponse>(API.REFRESH_TOKEN_URL, data)
 
 export const testAA = () =>
   request.get<any, any>(API.TEST_AA_URL, {

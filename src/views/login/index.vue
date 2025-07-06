@@ -7,7 +7,11 @@
           <h1>Hello</h1>
           <h2>欢迎来到ZZY后台管理系统</h2>
           <el-form-item prop="username">
-            <el-input :prefix-icon="User" placeholder="用户名" v-model="loginForm.username"></el-input>
+            <el-input
+              :prefix-icon="User"
+              placeholder="用户名"
+              v-model="loginForm.username"
+            ></el-input>
           </el-form-item>
           <el-form-item prop="password">
             <el-input
@@ -19,7 +23,13 @@
             ></el-input>
           </el-form-item>
           <el-form-item>
-            <el-button :loading="isLoding" class="login_btn" type="primary" size="default" @click="login">
+            <el-button
+              :loading="isLoding"
+              class="login_btn"
+              type="primary"
+              size="default"
+              @click="login"
+            >
               登录
             </el-button>
           </el-form-item>
@@ -57,7 +67,13 @@
   let isLoding = ref(false)
   let loginForms = ref()
 
-  const loginForm = reactive({ username: 'admin', password: '111111', decodeIv: '', aesKey: '', encryptedPassword: '' })
+  const loginForm = reactive({
+    username: 'admin',
+    password: '111111',
+    decodeIv: '',
+    aesKey: '',
+    encryptedPassword: '',
+  })
 
   const login = async () => {
     await loginForms.value.validate()

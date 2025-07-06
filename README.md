@@ -404,7 +404,8 @@ export interface ExampleResponse {
 import request from '@/utils/request'
 import type { ExampleRequest, ExampleResponse } from './type'
 
-export const getExampleList = (params: ExampleRequest) => request.get<any, ExampleResponse>('/example/list', { params })
+export const getExampleList = (params: ExampleRequest) =>
+  request.get<any, ExampleResponse>('/example/list', { params })
 ```
 
 ### 🎨 自定义主题
