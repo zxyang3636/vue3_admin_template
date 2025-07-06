@@ -10,7 +10,7 @@
     /* Linting */
     "strict": true,
     "noUnusedLocals": false, // 忽略未使用变量
-    "noUnusedParameters": true,
+    "noUnusedParameters": false,
     "erasableSyntaxOnly": false,
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true

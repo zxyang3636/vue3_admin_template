@@ -6,6 +6,7 @@
     "paths": {
       //路径映射，相对于baseUrl
       "@/*": ["src/*"]
-    }
+    },
+    "noUnusedLocals": false
   }
 }

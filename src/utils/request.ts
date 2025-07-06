@@ -84,7 +84,7 @@ request.interceptors.response.use(
 )
 
 // 处理业务错误（后端返回的错误码）
-const handleBusinessError = (data: Result, config: AxiosRequestConfig) => {
+const handleBusinessError = async (data: Result, config: AxiosRequestConfig) => {
   // 检查是否需要显示错误提示（默认显示）
   const shouldShowError = config?.showErrorMessage !== false
 
@@ -92,7 +92,7 @@ const handleBusinessError = (data: Result, config: AxiosRequestConfig) => {
     case 401:
     case 4001: // Token过期
     case 4002: // Token无效
-      handleTokenError(data.message, config)
+      await handleTokenError(data.message, config)
       if (shouldShowError) {
         const message = config?.errorMessage || data.message || '认证过期，请重新登录'
         ElMessage.error(message)
