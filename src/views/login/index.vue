@@ -49,7 +49,6 @@
   import { getPublicKey } from '@/api/auth/index.ts'
   import type { ApiResponse } from '@/api/type'
   import { CryptoUtils } from '@/utils/cryptoUtils'
-  import { Base64Utils } from '@/utils/base64Utils'
   defineOptions({
     name: 'Login',
   })

@@ -112,6 +112,7 @@ const handleBusinessError = async (data: Result, config: AxiosRequestConfig) => 
         const message = config?.errorMessage || data.message || '操作失败'
         ElMessage.error(message)
       }
+      return Promise.reject(new Error(data.message))
   }
 }
 
