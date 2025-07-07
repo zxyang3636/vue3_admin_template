@@ -6,6 +6,9 @@
 </template>
 
 <script setup lang="ts">
+  defineOptions({
+    name: 'Home',
+  })
   import { ref, reactive, toRefs, onMounted } from 'vue'
   import { testAA } from '@/api/user'
 

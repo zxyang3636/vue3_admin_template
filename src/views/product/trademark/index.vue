@@ -43,19 +43,21 @@
     <el-dialog v-model="dialogVisible" title="添加品牌" width="600">
       <el-form style="width: 70%">
         <el-form-item label-width="80px" label="品牌名称">
-          <el-input placeholder="输入品牌名称"></el-input>
+          <el-input placeholder="输入品牌名称" v-model="trademarkParams.brandName"></el-input>
         </el-form-item>
         <el-form-item label="品牌LOGO" label-width="80px">
-          <!-- <el-upload
+          <el-upload
+            :headers="uploadHeaders"
             class="avatar-uploader"
-            action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15"
+            action="/api/file/uploadImg"
+            :multiple="false"
             :show-file-list="false"
             :on-success="handleAvatarSuccess"
             :before-upload="beforeAvatarUpload"
           >
-            <img v-if="imageUrl" :src="imageUrl" class="avatar" />
+            <img v-if="trademarkParams.logoUrl" :src="trademarkParams.logoUrl" class="avatar" />
             <el-icon v-else class="avatar-uploader-icon"><Plus /></el-icon>
-          </el-upload> -->
+          </el-upload>
         </el-form-item>
       </el-form>
       <!-- 具名插槽 -->
@@ -71,9 +73,13 @@
   defineOptions({
     name: 'Trademark',
   })
-  import { reqTrademarkList } from '@/api/product/trademark/index'
-  import { fa } from 'element-plus/es/locales.mjs'
-  import { ref, reactive, toRefs, onMounted } from 'vue'
+  import { reqTrademarkList, reqTrademarkUpdate } from '@/api/product/trademark/index'
+  import type { TradeMark } from '@/api/product/trademark/type'
+  import useUserStore from '@/store/modules/user.ts'
+  import { ElMessage, type UploadProps } from 'element-plus'
+  import { ref, reactive, toRefs, onMounted, computed } from 'vue'
+
+  let userStore = useUserStore()
   onMounted(async () => {
     getTrademarkList()
   })
@@ -83,6 +89,45 @@
   let total = ref<number>(0)
   let trademarkList = ref<any>([])
   let dialogVisible = ref<boolean>(false)
+  let trademarkParams = reactive<TradeMark>({
+    id: null,
+    brandName: '',
+    logoUrl: '',
+  })
+
+  const handleAvatarSuccess = (response: any, file: File) => {
+    if (response && response.code === 200 && response.success) {
+      ElMessage.success('上传成功！')
+      trademarkParams.logoUrl = response.data
+      // console.log('新头像地址：', response.data)
+    } else {
+      ElMessage.error(response.message || '上传失败！')
+    }
+  }
+  // 允许的图片类型和最大大小（MB）
+  const ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/gif', 'image/webp']
+  const MAX_SIZE_MB = 15
+
+  const beforeAvatarUpload: UploadProps['beforeUpload'] = (rawFile) => {
+    if (!ALLOWED_TYPES.includes(rawFile.type)) {
+      ElMessage.error('只允许上传 JPG/PNG/GIF/WEBP 格式的图片！')
+      return false
+    }
+    if (rawFile.size / 1024 / 1024 > MAX_SIZE_MB) {
+      ElMessage.error(`图片大小不能超过 ${MAX_SIZE_MB}MB!`)
+      return false
+    }
+    return true
+  }
+
+  const uploadHeaders = computed(() => {
+    let token = userStore.accessToken
+    if (token) {
+      return {
+        Authorization: 'Bearer ' + token,
+      }
+    }
+  })
 
   const getTrademarkList = async () => {
     let res = await reqTrademarkList(pageNum.value, pageSize.value)
@@ -101,6 +146,9 @@
    */
   const insertTrademark = () => {
     dialogVisible.value = true
+    trademarkParams.id = null
+    trademarkParams.brandName = ''
+    trademarkParams.logoUrl = ''
   }
 
   /**
@@ -116,8 +164,16 @@
   const cancel = () => {
     dialogVisible.value = false
   }
-  const confirm = () => {
-    dialogVisible.value = false
+  const confirm = async () => {
+    try {
+      dialogVisible.value = false
+      await reqTrademarkUpdate(trademarkParams)
+      getTrademarkList()
+      dialogVisible.value = false
+    } catch (err: any) {
+      ElMessage.error(err.message)
+      dialogVisible.value = false
+    }
   }
 
   const handleDelete = (index: number, row: any) => {}

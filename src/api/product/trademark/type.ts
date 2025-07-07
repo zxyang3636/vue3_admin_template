@@ -1,10 +1,10 @@
 import type { ApiResponse, PageHelperResponse } from '@/api/type'
 
-interface TradeMark {
-  id?: number
+export interface TradeMark {
+  id?: number | null
   brandName: string
   logoUrl: string
-  createTime: string
+  createTime?: string
 }
 
 // 品牌分页响应
