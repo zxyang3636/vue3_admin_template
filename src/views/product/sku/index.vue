@@ -6,7 +6,7 @@
 
 <script setup lang="ts">
   import { ref, reactive, toRefs, onMounted } from 'vue'
-    defineOptions({
+  defineOptions({
     name: 'Sku',
   })
 </script>
