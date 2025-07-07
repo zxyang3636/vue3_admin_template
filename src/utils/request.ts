@@ -57,15 +57,15 @@ request.interceptors.response.use(
       return data
     } else {
       // 业务错误处理
-      const result = handleBusinessError(data, response.config as AxiosRequestConfig)
-      if (result !== undefined && result !== null) {
-        return result // 如果是token刷新成功后的重试请求，直接返回结果
-      }
-      return Promise.reject({
-        code: data.code,
-        message: data.message,
-        data: data.data,
-      })
+      return handleBusinessError(data, response.config as AxiosRequestConfig)
+      // if (result !== undefined && result !== null) {
+      //   return result // 如果是token刷新成功后的重试请求，直接返回结果
+      // }
+      // return Promise.reject({
+      //   code: data.code,
+      //   message: data.message,
+      //   data: data.data,
+      // })
     }
   },
   (error) => {
@@ -97,7 +97,7 @@ const handleBusinessError = async (data: Result, config: AxiosRequestConfig) => 
         const message = config?.errorMessage || data.message || '认证过期，请重新登录'
         ElMessage.error(message)
       }
-      break
+      return Promise.reject(new Error(data.message))
 
     case 403:
     case 3001: // 权限不足
@@ -105,7 +105,7 @@ const handleBusinessError = async (data: Result, config: AxiosRequestConfig) => 
         const message = config?.errorMessage || data.message || '无权限访问'
         ElMessage.error(message)
       }
-      break
+      return Promise.reject(new Error(data.message))
 
     default:
       if (shouldShowError) {
