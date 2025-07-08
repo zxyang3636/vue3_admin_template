@@ -63,7 +63,7 @@
       <!-- 具名插槽 -->
       <template #footer>
         <el-button type="info" @click="cancel">取消</el-button>
-        <el-button type="primary" @click="confirm">确定</el-button>
+        <el-button type="primary" @click="confirm" :loading="loading">确定</el-button>
       </template>
     </el-dialog>
   </div>
@@ -73,10 +73,14 @@
   defineOptions({
     name: 'Trademark',
   })
-  import { reqTrademarkList, reqTrademarkUpdate } from '@/api/product/trademark/index'
+  import {
+    reqTrademarkList,
+    reqTrademarkUpdate,
+    reqTrademarkDelete,
+  } from '@/api/product/trademark/index'
   import type { TradeMark } from '@/api/product/trademark/type'
   import useUserStore from '@/store/modules/user.ts'
-  import { ElMessage, type UploadProps } from 'element-plus'
+  import { ElMessage, ElMessageBox, type UploadProps } from 'element-plus'
   import { ref, reactive, toRefs, onMounted, computed } from 'vue'
 
   let userStore = useUserStore()
@@ -94,7 +98,7 @@
     brandName: '',
     logoUrl: '',
   })
-
+  let loading = ref<boolean>(false)
   const handleAvatarSuccess = (response: any, file: File) => {
     if (response && response.code === 200 && response.success) {
       ElMessage.success('上传成功！')
@@ -133,7 +137,6 @@
     let res = await reqTrademarkList(pageNum.value, pageSize.value)
     total.value = res.data.total
     trademarkList.value = res.data.list
-    // console.log(res)
   }
 
   const sizeChange = () => {
@@ -158,7 +161,9 @@
    */
   const handleEdit = (index: number, row: any) => {
     dialogVisible.value = true
-    console.log('edit', index, row)
+    trademarkParams.id = row.id
+    trademarkParams.brandName = row.brandName
+    trademarkParams.logoUrl = row.logoUrl
   }
 
   const cancel = () => {
@@ -166,17 +171,30 @@
   }
   const confirm = async () => {
     try {
-      dialogVisible.value = false
+      loading.value = true
       await reqTrademarkUpdate(trademarkParams)
-      getTrademarkList()
+      setTimeout(() => {
+        getTrademarkList()
+      }, 100)
       dialogVisible.value = false
     } catch (err: any) {
-      ElMessage.error(err.message)
-      dialogVisible.value = false
+      // 失败时不关闭对话框，让用户可以修改后重试
+      ElMessage.error(err.message || '更新失败，请重试')
+    } finally {
+      loading.value = false
     }
   }
 
-  const handleDelete = (index: number, row: any) => {}
+  const handleDelete = (index: number, row: any) => {
+    ElMessageBox.confirm('确定删除该品牌吗？', '提示', {
+      confirmButtonText: '确定',
+      cancelButtonText: '取消',
+      type: 'warning',
+    }).then(async () => {
+      await reqTrademarkDelete(row.id)
+      getTrademarkList()
+    })
+  }
 </script>
 
 <style scoped lang="scss">

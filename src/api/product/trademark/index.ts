@@ -6,7 +6,8 @@ import type { TradeMarkPageResponse, TradeMark } from './type'
 enum API {
   TRADEMARKS_URL = '/brand/getProductList/',
   INSERT_TRADEMARK = '/brand/insertTrademark',
-  UPDATE_TRADEMARK = '/updateTrademark',
+  UPDATE_TRADEMARK = '/brand/updateTrademark',
+  DELETE_TRADEMARK = '/brand/deleteTrademark/',
 }
 
 /**
@@ -36,3 +37,13 @@ export const reqTrademarkUpdate = (data: TradeMark) => {
     })
   }
 }
+
+/**
+ * 品牌删除
+ * @param id 品牌id
+ */
+export const reqTrademarkDelete = (id: number) =>
+  request.delete<any, any>(API.DELETE_TRADEMARK + id, {
+    showSuccessMessage: true,
+    successMessage: '删除成功',
+  })
