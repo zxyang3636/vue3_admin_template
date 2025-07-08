@@ -21,7 +21,16 @@
         <el-table-column label="品牌操作">
           <template #="{ row, $index }">
             <el-button size="small" @click="handleEdit($index, row)">编辑</el-button>
-            <el-button size="small" @click="handleDelete($index, row)">删除</el-button>
+            <el-popconfirm
+              icon="Delete"
+              width="270"
+              :title="`确定要删除 ${row.brandName} 品牌吗？`"
+              @confirm="handleDelete($index, row)"
+            >
+              <template #reference>
+                <el-button size="small">删除</el-button>
+              </template>
+            </el-popconfirm>
           </template>
         </el-table-column>
       </el-table>
@@ -40,12 +49,16 @@
     </el-card>
 
     <!-- 对话框组件 -->
-    <el-dialog v-model="dialogVisible" title="添加品牌" width="600">
-      <el-form style="width: 70%">
-        <el-form-item label-width="80px" label="品牌名称">
+    <el-dialog
+      v-model="dialogVisible"
+      :title="!trademarkParams.id ? '添加品牌' : '修改品牌'"
+      width="600"
+    >
+      <el-form style="width: 70%" :model="trademarkParams" :rules="rules" ref="formRef">
+        <el-form-item label-width="90px" label="品牌名称" prop="brandName">
           <el-input placeholder="输入品牌名称" v-model="trademarkParams.brandName"></el-input>
         </el-form-item>
-        <el-form-item label="品牌LOGO" label-width="80px">
+        <el-form-item label="品牌LOGO" label-width="90px" prop="logoUrl">
           <el-upload
             :headers="uploadHeaders"
             class="avatar-uploader"
@@ -99,10 +112,36 @@
     logoUrl: '',
   })
   let loading = ref<boolean>(false)
+  let formRef = ref<any>()
+
+  const validatorBrandName = (rule: any, value: any, callback: any) => {
+    if (trademarkParams.brandName.trim().length >= 2) {
+      callback()
+    } else {
+      callback(new Error('品牌名称长度必须大于等于2'))
+    }
+  }
+
+  const validatorLogoUrl = (rule: any, value: any, callback: any) => {
+    // value是上传的图片地址
+    if (value) {
+      callback()
+    } else {
+      callback(new Error('请上传品牌LOGO'))
+    }
+  }
+
+  const rules = {
+    brandName: [{ required: true, trigger: 'blur', validator: validatorBrandName }],
+    logoUrl: [{ required: true, trigger: 'blur', validator: validatorLogoUrl }],
+  }
+
   const handleAvatarSuccess = (response: any, file: File) => {
     if (response && response.code === 200 && response.success) {
       ElMessage.success('上传成功！')
       trademarkParams.logoUrl = response.data
+      // 清除校验信息
+      formRef.value.clearValidate('logoUrl')
       // console.log('新头像地址：', response.data)
     } else {
       ElMessage.error(response.message || '上传失败！')
@@ -133,7 +172,10 @@
     }
   })
 
-  const getTrademarkList = async () => {
+  const getTrademarkList = async (page?: number) => {
+    if (page) {
+      pageNum.value = page
+    }
     let res = await reqTrademarkList(pageNum.value, pageSize.value)
     total.value = res.data.total
     trademarkList.value = res.data.list
@@ -145,13 +187,14 @@
   }
 
   /**
-   * 添加trademark
+   * 添加trademark按钮
    */
   const insertTrademark = () => {
     dialogVisible.value = true
     trademarkParams.id = null
     trademarkParams.brandName = ''
     trademarkParams.logoUrl = ''
+    formRef?.value.resetFields()
   }
 
   /**
@@ -160,21 +203,21 @@
    * @param row
    */
   const handleEdit = (index: number, row: any) => {
+    formRef?.value.resetFields()
     dialogVisible.value = true
-    trademarkParams.id = row.id
-    trademarkParams.brandName = row.brandName
-    trademarkParams.logoUrl = row.logoUrl
+    Object.assign(trademarkParams, row)
   }
 
   const cancel = () => {
     dialogVisible.value = false
   }
   const confirm = async () => {
+    await formRef.value.validate()
     try {
       loading.value = true
       await reqTrademarkUpdate(trademarkParams)
       setTimeout(() => {
-        getTrademarkList()
+        getTrademarkList(!trademarkParams.id ? 1 : pageNum.value)
       }, 100)
       dialogVisible.value = false
     } catch (err: any) {
@@ -185,15 +228,9 @@
     }
   }
 
-  const handleDelete = (index: number, row: any) => {
-    ElMessageBox.confirm('确定删除该品牌吗？', '提示', {
-      confirmButtonText: '确定',
-      cancelButtonText: '取消',
-      type: 'warning',
-    }).then(async () => {
-      await reqTrademarkDelete(row.id)
-      getTrademarkList()
-    })
+  const handleDelete = async (index: number, row: any) => {
+    await reqTrademarkDelete(row.id)
+    getTrademarkList()
   }
 </script>
 
