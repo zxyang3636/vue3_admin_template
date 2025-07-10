@@ -2,32 +2,49 @@
   <el-card>
     <el-form ref="form" :inline="true" label-width="80px">
       <el-form-item label="一级分类">
-        <el-select v-model="value" clearable placeholder="Select" style="width: 240px">
+        <el-select
+          v-model="categoryStore.oneLevelId"
+          clearable
+          placeholder="Select"
+          style="width: 240px"
+          @change="getSecondLevel"
+        >
           <el-option
-            v-for="item in options"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
+            v-for="item in categoryStore.oneLevelData"
+            :key="item.id"
+            :label="item.name"
+            :value="item.id"
           />
         </el-select>
       </el-form-item>
       <el-form-item label="二级分类">
-        <el-select v-model="value" clearable placeholder="Select" style="width: 240px">
+        <el-select
+          v-model="categoryStore.secondLevelId"
+          clearable
+          placeholder="Select"
+          style="width: 240px"
+          @change="getThirdLevel"
+        >
           <el-option
-            v-for="item in options"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
+            v-for="item in categoryStore.secondLevelData"
+            :key="item.id"
+            :label="item.name"
+            :value="item.id"
           />
         </el-select>
       </el-form-item>
       <el-form-item label="三级分类">
-        <el-select v-model="value" clearable placeholder="Select" style="width: 240px">
+        <el-select
+          v-model="categoryStore.thirdLevelId"
+          clearable
+          placeholder="Select"
+          style="width: 240px"
+        >
           <el-option
-            v-for="item in options"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
+            v-for="item in categoryStore.thirdLevelData"
+            :key="item.id"
+            :label="item.name"
+            :value="item.id"
           />
         </el-select>
       </el-form-item>
@@ -37,29 +54,29 @@
 
 <script setup lang="ts">
   import { ref, reactive, toRefs, onMounted } from 'vue'
-  const value = ref('')
-  const options = [
-    {
-      value: 'Option1',
-      label: 'Option1',
-    },
-    {
-      value: 'Option2',
-      label: 'Option2',
-    },
-    {
-      value: 'Option3',
-      label: 'Option3',
-    },
-    {
-      value: 'Option4',
-      label: 'Option4',
-    },
-    {
-      value: 'Option5',
-      label: 'Option5',
-    },
-  ]
+  import useCategoryStore from '@/store/modules/category'
+  let categoryStore = useCategoryStore()
+  onMounted(() => {
+    getOneLevel()
+  })
+
+  const getThirdLevel = () => {
+    categoryStore.thirdLevelId = ''
+    categoryStore.thirdLevelData = []
+    categoryStore.getThirdLevel()
+  }
+
+  const getSecondLevel = () => {
+    categoryStore.secondLevelId = ''
+    categoryStore.secondLevelData = []
+    categoryStore.thirdLevelId = ''
+    categoryStore.thirdLevelData = []
+    categoryStore.getSecondlevel()
+  }
+
+  const getOneLevel = async () => {
+    categoryStore.getOneLevel()
+  }
 </script>
 
 <style scoped lang="scss"></style>
