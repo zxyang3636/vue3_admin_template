@@ -8,7 +8,14 @@ export interface Category {
 export interface Attribute {
   attributeKeysId?: string
   name: string
-  value: string
+  value: string[]
+  thirdLevelId?: string
+}
+
+export interface AttributeInsert {
+  name: string
+  value: string[]
+  thirdLevelId?: string
 }
 
 export type CategoryResponse = ApiResponse<Category[]>

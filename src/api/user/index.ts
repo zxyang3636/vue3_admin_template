@@ -24,7 +24,7 @@ export const reqUserInfo = () => request.get<any, UserInfoResponse>(API.USER_INF
 
 export const reqUserLogout = () =>
   request.post<any, any>(API.USER_LOGOUT_URL, null, {
-    showSuccessMessage: true,
+    showSuccessMessage: false,
     successMessage: '退出成功',
   })
 

@@ -8,6 +8,7 @@
           placeholder="Select"
           style="width: 240px"
           @change="getSecondLevel"
+          :disabled="scene == 1"
         >
           <el-option
             v-for="item in categoryStore.oneLevelData"
@@ -24,6 +25,7 @@
           placeholder="Select"
           style="width: 240px"
           @change="getThirdLevel"
+          :disabled="scene == 1"
         >
           <el-option
             v-for="item in categoryStore.secondLevelData"
@@ -39,6 +41,7 @@
           clearable
           placeholder="Select"
           style="width: 240px"
+          :disabled="scene == 1"
         >
           <el-option
             v-for="item in categoryStore.thirdLevelData"
@@ -53,11 +56,18 @@
 </template>
 
 <script setup lang="ts">
+  defineOptions({ name: 'Category' })
   import { ref, reactive, toRefs, onMounted } from 'vue'
   import useCategoryStore from '@/store/modules/category'
   let categoryStore = useCategoryStore()
   onMounted(() => {
     getOneLevel()
+  })
+  defineProps({
+    scene: {
+      type: Number,
+      default: 0,
+    },
   })
 
   const getThirdLevel = () => {
