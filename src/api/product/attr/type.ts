@@ -10,6 +10,7 @@ export interface Attribute {
   name: string
   value: string[]
   thirdLevelId?: string
+  flag?: boolean[]
 }
 
 export interface AttributeInsert {

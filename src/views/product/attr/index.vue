@@ -56,10 +56,22 @@
           <el-table-column prop="prop" label="序号" width="80" type="index"></el-table-column>
           <el-table-column prop="prop" label="属性值名称值" width="width">
             <template #="{ row, $index }">
-              <el-input v-model="attrParams.value[$index]" placeholder="属性值名称值"></el-input>
+              <el-input
+                :ref="(vc: any) => (inputList[$index] = vc)"
+                v-if="attrParams.flag?.[$index]"
+                v-model="attrParams.value[$index]"
+                placeholder="属性值名称值"
+                @blur="toPreview($index)"
+                size="small"
+              ></el-input>
+              <div @click="toEdit($index)" v-else>{{ attrParams.value[$index] }}</div>
             </template>
           </el-table-column>
-          <el-table-column prop="prop" label="操作" width="width"></el-table-column>
+          <el-table-column prop="prop" label="操作" width="width">
+            <template #="{ row, $index }">
+              <el-button type="warning" icon="Delete" @click="delAttr($index)"></el-button>
+            </template>
+          </el-table-column>
         </el-table>
         <el-button type="primary" icon="Plus" @click="save">保存</el-button>
         <el-button type="info" icon="Close" @click="cancelShow">取消</el-button>
@@ -69,7 +81,7 @@
 </template>
 
 <script setup lang="ts">
-  import { watch, ref, reactive, toRefs, onMounted } from 'vue'
+  import { watch, ref, reactive, toRefs, onMounted, nextTick } from 'vue'
   import useCategoryStore from '@/store/modules/category'
   import { getAttributeInfo, updateOrSaveAttribute } from '@/api/product/attr'
   import type { Attribute, AttributeResponse } from '@/api/product/attr/type'
@@ -84,10 +96,37 @@
     name: '',
     value: [],
     thirdLevelId: '',
+    flag: [],
   })
+
+  const delAttr = (index: number) => {
+    attrParams.value.splice(index, 1)
+    attrParams.flag?.splice(index, 1)
+  }
+
+  const toPreview = (index: number) => {
+    if (attrParams.value[index].trim() === '') {
+      return
+    }
+    attrParams.flag![index] = false
+  }
+  const toEdit = (index: number) => {
+    attrParams.flag![index] = true
+    //  nextTick响应式数据发生变化时，获取更新的DOM（组件实例）
+    nextTick(() => {
+      inputList.value[index].focus()
+    })
+  }
+
+  let inputList = ref<any[]>([])
 
   const addAttr = () => {
     attrParams.value.push('')
+    attrParams.flag?.push(true)
+    // 聚焦最后一项
+    nextTick(() => {
+      inputList.value[attrParams.value.length - 1].focus()
+    })
   }
 
   const save = async () => {
