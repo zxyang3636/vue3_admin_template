@@ -93,10 +93,10 @@ const handleBusinessError = async (data: Result, config: AxiosRequestConfig) => 
     case 4001: // Token过期
     case 4002: // Token无效
       await handleTokenError(data.message, config)
-      if (shouldShowError) {
-        const message = config?.errorMessage || data.message || '认证过期，请重新登录'
-        ElMessage.error(message)
-      }
+      // if (shouldShowError) {
+      //   const message = config?.errorMessage || data.message || '认证过期，请重新登录'
+      //   ElMessage.error(message)
+      // }
       return Promise.reject(new Error(data.message))
 
     case 403:
@@ -211,7 +211,7 @@ const handleTokenError = async (_message: string, originalConfig: AxiosRequestCo
 
     // 处理队列中的请求（传入错误）
     processQueue(error, null)
-    ElMessage.error('请重新登录')
+    ElMessage.error('认证过期，请重新登录')
     router.push('/login')
     return Promise.reject(error)
   } finally {
