@@ -9,6 +9,7 @@ enum API {
   THIRD_LEVEL_CATEGORY_URL = '/attr/getThirdLevelCategory',
   GET_ATTRIBUTE_INFO = '/attr/getAttributeInfo',
   SAVA_OR_UPDATE = '/attr/updateOrSaveAttribute',
+  DEL_ATTRIBUTE = '/attr/del',
 }
 
 // 暴露请求函数
@@ -31,3 +32,6 @@ export const getAttributeInfo = (id: string) =>
 
 export const updateOrSaveAttribute = (data: Attribute) =>
   request.post<any, any>(API.SAVA_OR_UPDATE, data, { showSuccessMessage: true })
+
+export const delAttribute = (attributeKeysId: string) =>
+  request.delete<any, any>(`${API.DEL_ATTRIBUTE}/${attributeKeysId}`, { showSuccessMessage: true })

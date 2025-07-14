@@ -31,8 +31,20 @@
           </el-table-column>
           <el-table-column prop="prop" label="操作" width="110">
             <template #="{ row, $index }">
-              <el-button @click="updateShow" icon="Edit" size="small" type="primary"></el-button>
-              <el-button icon="Delete" size="small" type="danger"></el-button>
+              <el-button
+                @click="updateAttr(row)"
+                icon="Edit"
+                size="small"
+                type="primary"
+              ></el-button>
+              <el-popconfirm
+                title="Are you sure to delete this?"
+                @confirm="delOpt(row.attributeKeysId)"
+              >
+                <template #reference>
+                  <el-button icon="Delete" size="small" type="danger"></el-button>
+                </template>
+              </el-popconfirm>
             </template>
           </el-table-column>
         </el-table>
@@ -81,12 +93,16 @@
 </template>
 
 <script setup lang="ts">
-  import { watch, ref, reactive, toRefs, onMounted, nextTick } from 'vue'
+  import { watch, ref, reactive, toRefs, onMounted, nextTick, onBeforeUnmount } from 'vue'
   import useCategoryStore from '@/store/modules/category'
-  import { getAttributeInfo, updateOrSaveAttribute } from '@/api/product/attr'
+  import { getAttributeInfo, updateOrSaveAttribute, delAttribute } from '@/api/product/attr'
   import type { Attribute, AttributeResponse } from '@/api/product/attr/type'
   import { ElMessage } from 'element-plus'
   let categoryStore = useCategoryStore()
+  onBeforeUnmount(() => {
+    categoryStore.$reset()
+  })
+
   defineOptions({
     name: 'Attr',
   })
@@ -98,6 +114,12 @@
     thirdLevelId: '',
     flag: [],
   })
+
+  const delOpt = async (attributeKeysId: string) => {
+    await delAttribute(attributeKeysId)
+    let res: AttributeResponse = await getAttributeInfo(categoryStore.thirdLevelId)
+    attributeData.value = res.data
+  }
 
   const delAttr = (index: number) => {
     attrParams.value.splice(index, 1)
@@ -150,6 +172,13 @@
       value: [],
       thirdLevelId: categoryStore.thirdLevelId,
     })
+  }
+
+  const updateAttr = (row: Attribute) => {
+    scene.value = 1
+    // 深拷贝
+    Object.assign(attrParams, JSON.parse(JSON.stringify(row)))
+    // console.log(row);
   }
   const cancelShow = () => {
     scene.value = 0
