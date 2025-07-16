@@ -1,7 +1,7 @@
 
-<div align="center">
+
 # 🚀 ZZY 企业级后台管理系统
-</div>
+
 
 <div align="center">
 
@@ -13,7 +13,7 @@
 
 **一个基于 Vue 3 + TypeScript + Vite 的现代化企业级中后台管理系统模板**
 
-[📖 在线文档](#) | [🎯 在线预览](#) | [🐛 报告问题](https://github.com/your-repo/issues) | [💡 功能建议](https://github.com/your-repo/issues)
+[📖 在线文档](#) | [🐛 报告问题](https://github.com/zxyang3636/vue3_admin_template/issues) | [💡 功能建议](https://github.com/zxyang3636/vue3_admin_template/issues)
 
 </div>
 
